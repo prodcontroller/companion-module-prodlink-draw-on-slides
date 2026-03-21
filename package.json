@@ -1,0 +1,20 @@
+{
+	"name": "companion-module-prodlink-slide-draw",
+	"version": "1.0.0",
+	"main": "dist/main.js",
+	"scripts": {
+		"build": "tsc -p tsconfig.json",
+		"dev": "tsc -p tsconfig.json --watch"
+	},
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/prodcontroller/companion-module-prodlink-slide-draw.git"
+	},
+	"dependencies": {
+		"@companion-module/base": "~1.11.0"
+	},
+	"devDependencies": {
+		"typescript": "~5.5.0"
+	}
+}
