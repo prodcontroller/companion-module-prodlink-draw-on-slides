@@ -1,5 +1,5 @@
 {
-	"name": "companion-module-prodlink-slide-draw",
+	"name": "companion-module-prodlink-draw-on-slides",
 	"version": "1.0.0",
 	"main": "dist/main.js",
 	"scripts": {
@@ -9,7 +9,7 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/prodcontroller/companion-module-prodlink-slide-draw.git"
+		"url": "git+https://github.com/prodcontroller/companion-module-prodlink-draw-on-slides.git"
 	},
 	"dependencies": {
 		"@companion-module/base": "~1.11.0"

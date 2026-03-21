@@ -1,12 +1,12 @@
 {
-	"id": "prodlink-slide-draw",
+	"id": "prodlink-draw-on-slides",
 	"name": "ProdLink: Draw on Slides",
 	"shortname": "Draw on Slides",
 	"description": "Control the Draw on Slides iPad app — switch drawing presets, navigate slides, and clear the canvas via HTTP API.",
 	"version": "1.0.0",
 	"license": "MIT",
-	"repository": "git+https://github.com/prodcontroller/companion-module-prodlink-slide-draw.git",
-	"bugs": "https://github.com/prodcontroller/companion-module-prodlink-slide-draw/issues",
+	"repository": "git+https://github.com/prodcontroller/companion-module-prodlink-draw-on-slides.git",
+	"bugs": "https://github.com/prodcontroller/companion-module-prodlink-draw-on-slides/issues",
 	"maintainers": [
 		{
 			"name": "ProdLink",
