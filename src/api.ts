@@ -80,19 +80,27 @@ export class SlideDrawAPI {
 
 	private async request<T>(method: string, path: string, body?: Record<string, unknown>): Promise<T> {
 		const url = `${this.baseUrl}${path}`;
-		const options: RequestInit = {
-			method,
-			headers: { 'Content-Type': 'application/json' },
-		};
-		if (body) {
-			options.body = JSON.stringify(body);
-		}
+		const controller = new AbortController();
+		const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-		const response = await fetch(url, options);
-		if (!response.ok) {
-			throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+		try {
+			const options: RequestInit = {
+				method,
+				headers: { 'Content-Type': 'application/json' },
+				signal: controller.signal,
+			};
+			if (body) {
+				options.body = JSON.stringify(body);
+			}
+
+			const response = await fetch(url, options);
+			if (!response.ok) {
+				throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+			}
+			return response.json() as Promise<T>;
+		} finally {
+			clearTimeout(timeoutId);
 		}
-		return response.json() as Promise<T>;
 	}
 
 	// GET endpoints

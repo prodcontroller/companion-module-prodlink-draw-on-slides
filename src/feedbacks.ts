@@ -1,9 +1,9 @@
 import type { CompanionFeedbackDefinitions } from '@companion-module/base'
 import { combineRgb } from '@companion-module/base'
+import type { SlideDrawInstance } from './main'
+import type { SettingsState } from './api'
 
-// Use 'any' for the instance type to avoid circular dependency
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function getFeedbacks(instance: any): CompanionFeedbackDefinitions {
+export function getFeedbacks(instance: SlideDrawInstance): CompanionFeedbackDefinitions {
 	return {
 		activePreset: {
 			type: 'boolean',
@@ -27,7 +27,7 @@ export function getFeedbacks(instance: any): CompanionFeedbackDefinitions {
 				color: combineRgb(255, 255, 255),
 			},
 			callback: (feedback) => {
-				const presetId = String(feedback.options.preset)
+				const presetId = String(feedback.options['preset'])
 				return instance.presetState?.activePreset === parseInt(presetId)
 			},
 		},
@@ -77,7 +77,7 @@ export function getFeedbacks(instance: any): CompanionFeedbackDefinitions {
 				color: combineRgb(0, 0, 0),
 			},
 			callback: (feedback) => {
-				const targetColor = String(feedback.options.color).toUpperCase()
+				const targetColor = String(feedback.options['color']).toUpperCase()
 				const currentColor = (instance.presetState?.color || '').toUpperCase()
 				return currentColor === targetColor
 			},
@@ -120,8 +120,8 @@ export function getFeedbacks(instance: any): CompanionFeedbackDefinitions {
 				color: combineRgb(255, 255, 255),
 			},
 			callback: (feedback) => {
-				const presetNum = parseInt(String(feedback.options.preset))
-				const targetBrush = String(feedback.options.brushType)
+				const presetNum = parseInt(String(feedback.options['preset'])) as 1 | 2 | 3
+				const targetBrush = String(feedback.options['brushType'])
 				const presetData = instance.presetState?.presets?.[presetNum]
 				return presetData?.brushType === targetBrush
 			},
@@ -159,8 +159,9 @@ export function getFeedbacks(instance: any): CompanionFeedbackDefinitions {
 				color: combineRgb(255, 255, 255),
 			},
 			callback: (feedback) => {
-				const settingKey = String(feedback.options.setting)
-				const value = (instance.settingsState as any)?.[settingKey]
+				const settingKey = String(feedback.options['setting']) as keyof SettingsState
+				if (!instance.settingsState) return false
+				const value = instance.settingsState[settingKey]
 				return value === true
 			},
 		},

@@ -17,7 +17,7 @@ interface ModuleConfig {
 	pollInterval: number
 }
 
-class SlideDrawInstance extends InstanceBase<ModuleConfig> {
+export class SlideDrawInstance extends InstanceBase<ModuleConfig> {
 	public api!: SlideDrawAPI
 	private pollTimer: ReturnType<typeof setTimeout> | null = null
 	private isPolling = false
@@ -159,8 +159,15 @@ class SlideDrawInstance extends InstanceBase<ModuleConfig> {
 			}, interval)
 		}
 
-		// Immediate first poll
-		this.pollState().then(() => scheduleNext())
+		// Immediate first poll — protected with isPolling guard and error handling
+		if (this.isPolling) return
+		this.isPolling = true
+		this.pollState()
+			.catch((e) => this.log('warn', `Initial poll failed: ${e}`))
+			.finally(() => {
+				this.isPolling = false
+				scheduleNext()
+			})
 	}
 
 	/**

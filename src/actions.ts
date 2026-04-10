@@ -1,8 +1,7 @@
-import type { CompanionActionDefinitions } from '@companion-module/base'
+import { InstanceStatus, type CompanionActionDefinitions } from '@companion-module/base'
+import type { SlideDrawInstance } from './main'
 
-// Use 'any' for the instance type to avoid circular dependency
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function getActions(instance: any): CompanionActionDefinitions {
+export function getActions(instance: SlideDrawInstance): CompanionActionDefinitions {
 	return {
 		clearCanvas: {
 			name: 'Clear Canvas',
@@ -13,7 +12,8 @@ export function getActions(instance: any): CompanionActionDefinitions {
 					await instance.api.clearCanvas()
 					instance.log('info', 'Canvas cleared')
 				} catch (e) {
-					instance.log('warn', `Clear canvas failed: ${e}`)
+					instance.log('error', `Clear canvas failed: ${e}`)
+					instance.updateStatus(InstanceStatus.UnknownError, 'Clear canvas failed')
 				}
 			},
 		},
@@ -27,7 +27,7 @@ export function getActions(instance: any): CompanionActionDefinitions {
 					await instance.api.undo()
 					instance.log('info', 'Undo triggered')
 				} catch (e) {
-					instance.log('warn', `Undo failed: ${e}`)
+					instance.log('error', `Undo failed: ${e}`)
 				}
 			},
 		},
@@ -41,7 +41,7 @@ export function getActions(instance: any): CompanionActionDefinitions {
 					await instance.api.zoomReset()
 					instance.log('info', 'Zoom reset')
 				} catch (e) {
-					instance.log('warn', `Zoom reset failed: ${e}`)
+					instance.log('error', `Zoom reset failed: ${e}`)
 				}
 			},
 		},
@@ -64,11 +64,11 @@ export function getActions(instance: any): CompanionActionDefinitions {
 			],
 			callback: async (action) => {
 				try {
-					const presetId = parseInt(String(action.options.preset)) as 1 | 2 | 3
+					const presetId = parseInt(String(action.options['preset'])) as 1 | 2 | 3
 					await instance.api.switchPreset(presetId)
 					instance.log('info', `Switched to preset ${presetId}`)
 				} catch (e) {
-					instance.log('warn', `Switch preset failed: ${e}`)
+					instance.log('error', `Switch preset failed: ${e}`)
 				}
 			},
 		},
@@ -82,7 +82,7 @@ export function getActions(instance: any): CompanionActionDefinitions {
 					await instance.api.nextSlide()
 					instance.log('info', 'Triggered next slide')
 				} catch (e) {
-					instance.log('warn', `Next slide failed: ${e}`)
+					instance.log('error', `Next slide failed: ${e}`)
 				}
 			},
 		},
@@ -96,7 +96,7 @@ export function getActions(instance: any): CompanionActionDefinitions {
 					await instance.api.previousSlide()
 					instance.log('info', 'Triggered previous slide')
 				} catch (e) {
-					instance.log('warn', `Previous slide failed: ${e}`)
+					instance.log('error', `Previous slide failed: ${e}`)
 				}
 			},
 		},
@@ -115,11 +115,11 @@ export function getActions(instance: any): CompanionActionDefinitions {
 			],
 			callback: async (action) => {
 				try {
-					const color = String(action.options.color).trim()
+					const color = String(action.options['color']).trim()
 					await instance.api.setColor(color)
 					instance.log('info', `Color set to ${color}`)
 				} catch (e) {
-					instance.log('warn', `Set color failed: ${e}`)
+					instance.log('error', `Set color failed: ${e}`)
 				}
 			},
 		},
@@ -140,11 +140,11 @@ export function getActions(instance: any): CompanionActionDefinitions {
 			],
 			callback: async (action) => {
 				try {
-					const size = Number(action.options.size)
+					const size = Number(action.options['size'])
 					await instance.api.setSize(size)
 					instance.log('info', `Size set to ${size}`)
 				} catch (e) {
-					instance.log('warn', `Set size failed: ${e}`)
+					instance.log('error', `Set size failed: ${e}`)
 				}
 			},
 		},
@@ -166,11 +166,11 @@ export function getActions(instance: any): CompanionActionDefinitions {
 			],
 			callback: async (action) => {
 				try {
-					const opacity = Number(action.options.opacity)
+					const opacity = Number(action.options['opacity'])
 					await instance.api.setOpacity(opacity)
 					instance.log('info', `Opacity set to ${opacity}`)
 				} catch (e) {
-					instance.log('warn', `Set opacity failed: ${e}`)
+					instance.log('error', `Set opacity failed: ${e}`)
 				}
 			},
 		},
@@ -232,20 +232,20 @@ export function getActions(instance: any): CompanionActionDefinitions {
 			],
 			callback: async (action) => {
 				try {
-					const presetId = parseInt(String(action.options.preset)) as 1 | 2 | 3
+					const presetId = parseInt(String(action.options['preset'])) as 1 | 2 | 3
 					const settings: Record<string, unknown> = {}
 
-					if (action.options.color && String(action.options.color).trim()) {
-						settings.color = String(action.options.color).trim()
+					if (action.options['color'] && String(action.options['color']).trim()) {
+						settings.color = String(action.options['color']).trim()
 					}
-					if (action.options.brushType && String(action.options.brushType).trim()) {
-						settings.brushType = String(action.options.brushType)
+					if (action.options['brushType'] && String(action.options['brushType']).trim()) {
+						settings.brushType = String(action.options['brushType'])
 					}
-					if (typeof action.options.size === 'number' && action.options.size > 0) {
-						settings.size = action.options.size
+					if (typeof action.options['size'] === 'number' && action.options['size'] > 0) {
+						settings.size = action.options['size']
 					}
-					if (typeof action.options.opacity === 'number' && action.options.opacity > 0) {
-						settings.opacity = action.options.opacity
+					if (typeof action.options['opacity'] === 'number' && action.options['opacity'] > 0) {
+						settings.opacity = action.options['opacity']
 					}
 
 					if (Object.keys(settings).length === 0) {
@@ -256,7 +256,7 @@ export function getActions(instance: any): CompanionActionDefinitions {
 					await instance.api.updatePreset(presetId, settings)
 					instance.log('info', `Updated preset ${presetId}: ${JSON.stringify(settings)}`)
 				} catch (e) {
-					instance.log('warn', `Update preset failed: ${e}`)
+					instance.log('error', `Update preset failed: ${e}`)
 				}
 			},
 		},
@@ -289,10 +289,10 @@ export function getActions(instance: any): CompanionActionDefinitions {
 			],
 			callback: async (action) => {
 				try {
-					const settingKey = String(action.options.setting)
+					const settingKey = String(action.options['setting']) as keyof import('./api').SettingsState
 					// Get current value and toggle it
 					const settings = await instance.api.getSettings()
-					const currentValue = (settings as any)[settingKey]
+					const currentValue = settings[settingKey]
 					if (typeof currentValue !== 'boolean') {
 						instance.log('warn', `Setting ${settingKey} is not a boolean toggle`)
 						return
@@ -300,7 +300,7 @@ export function getActions(instance: any): CompanionActionDefinitions {
 					await instance.api.updateSettings({ [settingKey]: !currentValue })
 					instance.log('info', `Toggled ${settingKey}: ${currentValue} → ${!currentValue}`)
 				} catch (e) {
-					instance.log('warn', `Toggle setting failed: ${e}`)
+					instance.log('error', `Toggle setting failed: ${e}`)
 				}
 			},
 		},
