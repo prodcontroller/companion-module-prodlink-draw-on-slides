@@ -1,5 +1,66 @@
-import type { CompanionPresetDefinitions } from '@companion-module/base'
+import type { CompanionPresetDefinitions, CompanionPresetSection } from '@companion-module/base'
 import { combineRgb } from '@companion-module/base'
+
+export function getPresetSections(): CompanionPresetSection[] {
+	return [
+		{
+			id: 'drawing-tools',
+			name: 'Drawing Tools',
+			definitions: ['preset1', 'preset2', 'preset3'],
+		},
+		{
+			id: 'canvas-actions',
+			name: 'Canvas Actions',
+			definitions: ['clearCanvas', 'undo', 'zoomReset'],
+		},
+		{
+			id: 'slide-navigation',
+			name: 'Slide Navigation',
+			definitions: ['nextSlide', 'previousSlide'],
+		},
+		{
+			id: 'preset-1-brushes',
+			name: 'Preset 1 Brushes',
+			definitions: ['p1_brush_pencil', 'p1_brush_marker', 'p1_brush_watercolor', 'p1_brush_pen', 'p1_brush_monoline', 'p1_brush_fountainPen', 'p1_brush_crayon'],
+		},
+		{
+			id: 'preset-2-brushes',
+			name: 'Preset 2 Brushes',
+			definitions: ['p2_brush_pencil', 'p2_brush_marker', 'p2_brush_watercolor', 'p2_brush_pen', 'p2_brush_monoline', 'p2_brush_fountainPen', 'p2_brush_crayon'],
+		},
+		{
+			id: 'preset-3-brushes',
+			name: 'Preset 3 Brushes',
+			definitions: ['p3_brush_pencil', 'p3_brush_marker', 'p3_brush_watercolor', 'p3_brush_pen', 'p3_brush_monoline', 'p3_brush_fountainPen', 'p3_brush_crayon'],
+		},
+		{
+			id: 'colors',
+			name: 'Colors',
+			definitions: [
+				'colorWhite', 'colorRed', 'colorOrange', 'colorYellow', 'colorGreen',
+				'colorCyan', 'colorBlue', 'colorPurple', 'colorPink', 'colorBlack',
+			],
+		},
+		{
+			id: 'brush-size',
+			name: 'Brush Size',
+			definitions: ['size5', 'size10', 'size15', 'size20', 'size25', 'size30', 'size35', 'size40', 'size50'],
+		},
+		{
+			id: 'opacity',
+			name: 'Opacity',
+			definitions: ['opacity10', 'opacity20', 'opacity30', 'opacity40', 'opacity50', 'opacity60', 'opacity70', 'opacity80', 'opacity90', 'opacity100'],
+		},
+		{
+			id: 'settings',
+			name: 'Settings',
+			definitions: [
+				'toggleClear', 'toggleFinger', 'toggleSwipe', 'toggleZoomReset',
+				'toggleTimer', 'toggleStageMsg', 'togglePrevNext', 'toggleThumbNav', 'toggleLabels',
+			],
+		},
+	]
+}
 
 export function getPresets(): CompanionPresetDefinitions {
 	const presets: CompanionPresetDefinitions = {
@@ -7,8 +68,7 @@ export function getPresets(): CompanionPresetDefinitions {
 		// Drawing Tool Presets (P1, P2, P3)
 		// ========================================
 		preset1: {
-			type: 'button',
-			category: 'Drawing Tools',
+			type: 'simple',
 			name: 'Preset 1',
 			style: {
 				text: 'P1 $(Draw_on_Slides:p1_icon)\\n$(Draw_on_Slides:p1_brush)',
@@ -24,8 +84,7 @@ export function getPresets(): CompanionPresetDefinitions {
 			}],
 		},
 		preset2: {
-			type: 'button',
-			category: 'Drawing Tools',
+			type: 'simple',
 			name: 'Preset 2',
 			style: {
 				text: 'P2 $(Draw_on_Slides:p2_icon)\\n$(Draw_on_Slides:p2_brush)',
@@ -41,8 +100,7 @@ export function getPresets(): CompanionPresetDefinitions {
 			}],
 		},
 		preset3: {
-			type: 'button',
-			category: 'Drawing Tools',
+			type: 'simple',
 			name: 'Preset 3',
 			style: {
 				text: 'P3 $(Draw_on_Slides:p3_icon)\\n$(Draw_on_Slides:p3_brush)',
@@ -62,8 +120,7 @@ export function getPresets(): CompanionPresetDefinitions {
 		// Canvas Actions
 		// ========================================
 		clearCanvas: {
-			type: 'button',
-			category: 'Canvas Actions',
+			type: 'simple',
 			name: 'Clear Canvas',
 			style: {
 				text: 'Clear\\n🧹',
@@ -79,8 +136,7 @@ export function getPresets(): CompanionPresetDefinitions {
 			}],
 		},
 		undo: {
-			type: 'button',
-			category: 'Canvas Actions',
+			type: 'simple',
 			name: 'Undo',
 			style: {
 				text: 'Undo\\n↩️',
@@ -92,8 +148,7 @@ export function getPresets(): CompanionPresetDefinitions {
 			feedbacks: [],
 		},
 		zoomReset: {
-			type: 'button',
-			category: 'Canvas Actions',
+			type: 'simple',
 			name: 'Reset Zoom',
 			style: {
 				text: 'Zoom\\nReset 🔍',
@@ -113,8 +168,7 @@ export function getPresets(): CompanionPresetDefinitions {
 		// Slide Navigation
 		// ========================================
 		nextSlide: {
-			type: 'button',
-			category: 'Slide Navigation',
+			type: 'simple',
 			name: 'Next Slide',
 			style: {
 				text: 'Next\\n▶',
@@ -126,8 +180,7 @@ export function getPresets(): CompanionPresetDefinitions {
 			feedbacks: [],
 		},
 		previousSlide: {
-			type: 'button',
-			category: 'Slide Navigation',
+			type: 'simple',
 			name: 'Previous Slide',
 			style: {
 				text: '◀\\nPrev',
@@ -156,8 +209,7 @@ export function getPresets(): CompanionPresetDefinitions {
 	for (let pNum = 1; pNum <= 3; pNum++) {
 		for (const brush of brushTypes) {
 			presets[`p${pNum}_brush_${brush.id}`] = {
-				type: 'button',
-				category: `Preset ${pNum} Brushes`,
+				type: 'simple',
 				name: `P${pNum} ${brush.name}`,
 				style: {
 					text: `${brush.emoji}\\n${brush.name}`,
@@ -193,8 +245,7 @@ export function getPresets(): CompanionPresetDefinitions {
 
 	for (const color of colors) {
 		presets[color.id] = {
-			type: 'button',
-			category: 'Colors',
+			type: 'simple',
 			name: color.name,
 			style: {
 				text: color.name,
@@ -223,8 +274,7 @@ export function getPresets(): CompanionPresetDefinitions {
 
 	for (const size of sizes) {
 		presets[`size${size}`] = {
-			type: 'button',
-			category: 'Brush Size',
+			type: 'simple',
 			name: `Size ${size}`,
 			style: {
 				text: `Size\\n${size}`,
@@ -244,8 +294,7 @@ export function getPresets(): CompanionPresetDefinitions {
 		const opacity = pct / 100
 		const brightness = Math.round(pct * 1.8)
 		presets[`opacity${pct}`] = {
-			type: 'button',
-			category: 'Opacity',
+			type: 'simple',
 			name: `${pct}% Opacity`,
 			style: {
 				text: `Opacity\\n${pct}%`,
@@ -275,8 +324,7 @@ export function getPresets(): CompanionPresetDefinitions {
 
 	for (const toggle of settingToggles) {
 		presets[toggle.id] = {
-			type: 'button',
-			category: 'Settings',
+			type: 'simple',
 			name: toggle.label.replace('\\n', ' '),
 			style: {
 				text: `${toggle.label}\\n$(Draw_on_Slides:${toggle.varId})`,

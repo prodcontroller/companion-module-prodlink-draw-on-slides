@@ -1,14 +1,15 @@
 import {
 	InstanceBase,
-	runEntrypoint,
 	InstanceStatus,
 	type SomeCompanionConfigField,
+	type JsonObject,
 } from '@companion-module/base'
 import { getActions } from './actions.js'
-import { getVariables, brushTypeEmoji } from './variables.js'
-import { getPresets } from './presets.js'
+import { getVariables } from './variables.js'
+import { getPresets, getPresetSections } from './presets.js'
 import { getFeedbacks } from './feedbacks.js'
 import { SlideDrawAPI, type PresetState, type SlideState, type ConnectionState, type SettingsState } from './api.js'
+import { brushTypeEmoji } from './variables.js'
 
 interface ModuleConfig {
 	ipad: string // bonjour-device field: "ip:port" or manual entry
@@ -17,7 +18,7 @@ interface ModuleConfig {
 	pollInterval: number
 }
 
-export class SlideDrawInstance extends InstanceBase<ModuleConfig> {
+export default class SlideDrawInstance extends InstanceBase {
 	public api!: SlideDrawAPI
 	private pollTimer: ReturnType<typeof setTimeout> | null = null
 	private isPolling = false
@@ -31,7 +32,8 @@ export class SlideDrawInstance extends InstanceBase<ModuleConfig> {
 	public connectionState: ConnectionState | null = null
 	public settingsState: SettingsState | null = null
 
-	async init(config: ModuleConfig): Promise<void> {
+	async init(rawConfig: JsonObject): Promise<void> {
+		const config = rawConfig as unknown as ModuleConfig
 		this.log('info', 'Initializing ProdLink: Draw on Slides module')
 
 		try {
@@ -41,16 +43,17 @@ export class SlideDrawInstance extends InstanceBase<ModuleConfig> {
 			this.api = new SlideDrawAPI(host, port)
 			this.setActionDefinitions(getActions(this))
 			this.setVariableDefinitions(getVariables())
-			this.setPresetDefinitions(getPresets())
+			this.setPresetDefinitions(getPresetSections(), getPresets())
 			this.setFeedbackDefinitions(getFeedbacks(this))
 		} catch (e) {
 			this.log('error', `Init error: ${e}`)
 		}
 
-		await this.configUpdated(config)
+		await this.configUpdated(rawConfig)
 	}
 
-	async configUpdated(config: ModuleConfig): Promise<void> {
+	async configUpdated(rawConfig: JsonObject): Promise<void> {
+		const config = rawConfig as unknown as ModuleConfig
 		try {
 			const { host, port } = this.resolveHostPort(config)
 			this.configuredHost = host
@@ -120,7 +123,6 @@ export class SlideDrawInstance extends InstanceBase<ModuleConfig> {
 				label: 'iPad IP Address (manual)',
 				width: 8,
 				default: '192.168.1.100',
-				isVisible: (config) => !config.ipad || config.ipad === 'manual',
 			},
 			{
 				type: 'number',
@@ -130,7 +132,6 @@ export class SlideDrawInstance extends InstanceBase<ModuleConfig> {
 				default: 8080,
 				min: 1,
 				max: 65535,
-				isVisible: (config) => !config.ipad || config.ipad === 'manual',
 			},
 			{
 				type: 'number',
@@ -287,5 +288,3 @@ export class SlideDrawInstance extends InstanceBase<ModuleConfig> {
 		}
 	}
 }
-
-runEntrypoint(SlideDrawInstance, [])

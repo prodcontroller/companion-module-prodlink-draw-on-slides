@@ -3,7 +3,7 @@
 	"name": "prodlink-draw-on-slides",
 	"shortname": "Draw on Slides",
 	"description": "Control the Draw on Slides iPad app — switch drawing presets, navigate slides, and clear the canvas via HTTP API.",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"license": "MIT",
 	"repository": "git+https://github.com/bitfocus/companion-module-prodlink-draw-on-slides.git",
 	"bugs": "https://github.com/bitfocus/companion-module-prodlink-draw-on-slides/issues",
@@ -20,7 +20,7 @@
 	"runtime": {
 		"type": "node22",
 		"api": "nodejs-ipc",
-		"apiVersion": "1.12.0",
+		"apiVersion": "2.0.0",
 		"entrypoint": "../dist/main.js"
 	},
 	"bonjourQueries": {

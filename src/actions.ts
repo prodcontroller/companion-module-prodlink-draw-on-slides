@@ -1,5 +1,5 @@
 import { InstanceStatus, type CompanionActionDefinitions } from '@companion-module/base'
-import type { SlideDrawInstance } from './main.js'
+import type SlideDrawInstance from './main.js'
 
 export function getActions(instance: SlideDrawInstance): CompanionActionDefinitions {
 	return {
@@ -110,7 +110,6 @@ export function getActions(instance: SlideDrawInstance): CompanionActionDefiniti
 					id: 'color',
 					label: 'Color (hex, e.g. #FF0000)',
 					default: '#FF0000',
-					required: true,
 				},
 			],
 			callback: async (action) => {
@@ -135,7 +134,6 @@ export function getActions(instance: SlideDrawInstance): CompanionActionDefiniti
 					default: 20,
 					min: 1,
 					max: 100,
-					required: true,
 				},
 			],
 			callback: async (action) => {
@@ -161,7 +159,6 @@ export function getActions(instance: SlideDrawInstance): CompanionActionDefiniti
 					min: 0.1,
 					max: 1,
 					step: 0.1,
-					required: true,
 				},
 			],
 			callback: async (action) => {

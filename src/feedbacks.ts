@@ -1,6 +1,6 @@
 import type { CompanionFeedbackDefinitions } from '@companion-module/base'
 import { combineRgb } from '@companion-module/base'
-import type { SlideDrawInstance } from './main.js'
+import type SlideDrawInstance from './main.js'
 import type { SettingsState } from './api.js'
 
 export function getFeedbacks(instance: SlideDrawInstance): CompanionFeedbackDefinitions {
