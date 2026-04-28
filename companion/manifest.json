@@ -1,4 +1,5 @@
 {
+	"type": "connection",
 	"id": "prodlink-draw-on-slides",
 	"name": "prodlink-draw-on-slides",
 	"shortname": "Draw on Slides",
