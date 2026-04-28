@@ -4,7 +4,7 @@
 	"name": "prodlink-draw-on-slides",
 	"shortname": "Draw on Slides",
 	"description": "Control the Draw on Slides iPad app — switch drawing presets, navigate slides, and clear the canvas via HTTP API.",
-	"version": "1.0.4",
+	"version": "1.0.5",
 	"license": "MIT",
 	"repository": "git+https://github.com/bitfocus/companion-module-prodlink-draw-on-slides.git",
 	"bugs": "https://github.com/bitfocus/companion-module-prodlink-draw-on-slides/issues",
